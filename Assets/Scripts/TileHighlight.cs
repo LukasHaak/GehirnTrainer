@@ -44,20 +44,45 @@ public class TileHighlight : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.N))
         {
-            NewRound();
+            StartCoroutine(OneRound());
         }
+    }
+
+    IEnumerator OneRound()
+    {
+        NewRound();
+
+        yield return new WaitForSeconds(1);
+
+        ResetRound();
     }
 
     void NewRound ()
     {
-        //prepare for new round
-        previousTile = currentTile;
-        //tiles[currentTile].gameObject.GetComponent<Material>().color = new Color(0,0,0,1);
-
-        //new round
         currentTile = Random.Range(0, tiles.Length);
         Debug.Log("Current Tile Number " + currentTile);
-        tiles[currentTile].gameObject.GetComponent<Material>().color = new Color(0,1,0,1);
+        tiles[currentTile].gameObject.GetComponent<Renderer>().material.color = new Color(0,0,1,1);
 
+    }
+
+    void ResetRound()
+    {
+        if (currentTile < tiles.Length)     //checks if it's the first round
+        {
+            previousTile = currentTile;
+            tiles[currentTile].gameObject.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 1);
+        }
+    }
+
+    public void OnClick()
+    {
+        if (previousTile == currentTile)
+        {
+            Debug.Log("Well Done");
+        }
+        else
+        {
+            Debug.Log("Better luck next time...");
+        }
     }
 }
